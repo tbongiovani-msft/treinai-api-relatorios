@@ -25,6 +25,7 @@ var host = new HostBuilder()
         services.AddRepository<Atividade>("atividades");
         services.AddRepository<Avaliacao>("avaliacoes");
         services.AddRepository<Aluno>("alunos");
+        services.AddRepository<Treino>("treinos");
     })
     .Build();
 

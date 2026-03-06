@@ -18,6 +18,7 @@ public class RelatorioFunctions
     private readonly IRepository<Atividade> _atividadeRepo;
     private readonly IRepository<Avaliacao> _avaliacaoRepo;
     private readonly IRepository<Aluno> _alunoRepo;
+    private readonly IRepository<Treino> _treinoRepo;
     private readonly TenantContext _tenantContext;
     private readonly ILogger<RelatorioFunctions> _logger;
 
@@ -25,12 +26,14 @@ public class RelatorioFunctions
         IRepository<Atividade> atividadeRepo,
         IRepository<Avaliacao> avaliacaoRepo,
         IRepository<Aluno> alunoRepo,
+        IRepository<Treino> treinoRepo,
         TenantContext tenantContext,
         ILogger<RelatorioFunctions> logger)
     {
         _atividadeRepo = atividadeRepo;
         _avaliacaoRepo = avaliacaoRepo;
         _alunoRepo = alunoRepo;
+        _treinoRepo = treinoRepo;
         _tenantContext = tenantContext;
         _logger = logger;
     }
@@ -43,6 +46,7 @@ public class RelatorioFunctions
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "relatorios/dashboard")] HttpRequestData req)
     {
         var totalAlunos = await _alunoRepo.CountAsync(_tenantContext.TenantId);
+        var totalTreinos = await _treinoRepo.CountAsync(_tenantContext.TenantId);
         var totalAtividades = await _atividadeRepo.CountAsync(_tenantContext.TenantId);
         var totalAvaliacoes = await _avaliacaoRepo.CountAsync(_tenantContext.TenantId);
 
@@ -61,6 +65,7 @@ public class RelatorioFunctions
         var dashboard = new
         {
             totalAlunos,
+            totalTreinos,
             totalAtividades,
             totalAvaliacoes,
             atividadesUltimos7Dias = atividadesRecentes,
